@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>COMEX SEGURO | Seguro de Mercadería (Impo/Expo) · Cotizador instantáneo</title>
+  <meta name="description" content="Seguro de carga (Impo/Expo). Simulá cobertura y prima indicativa en 2 minutos y pedí la cotización final." />
+  <meta property="og:title" content="COMEX SEGURO | Seguro de Mercadería (Impo/Expo)" />
+  <meta property="og:description" content="Simulá cobertura y prima indicativa en 2 minutos. Luego pedí la cotización final." />
+  <meta property="og:type" content="website" />
+  <style>
+
+
+    :root{
+      --bg:#070a14; --panel:#0f1630; --card:#111a33;
+      --txt:#eef3ff; --muted:#a8b6d9; --soft:rgba(255,255,255,.10);
+      --acc1:#6ee7ff; --acc2:#82ffb4;
+      --danger:#ff6e86; --ok:#82ffb4;
+      --radius:18px;
+    }
+    *{ box-sizing:border-box; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+    body{ margin:0; background:linear-gradient(180deg,#050712,var(--bg)); color:var(--txt); }
+    a{ color:var(--acc1); text-decoration:none; }
+    .wrap{ max-width:1120px; margin:0 auto; padding:26px 18px 64px; }
+    .topbar{ display:flex; justify-content:space-between; align-items:center; gap:14px; padding:10px 0 18px; }
+    .brand{ display:flex; flex-direction:column; gap:3px; }
+    .brand b{ font-size:14px; letter-spacing:.35px; }
+    .brand span{ font-size:12px; color:rgba(238,243,255,.65); }
+    .pill{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border:1px solid var(--soft); border-radius:999px; background:rgba(255,255,255,.04); color:rgba(238,243,255,.9); font-size:13px; }
+    .grid{ display:grid; grid-template-columns: 1.18fr .82fr; gap:16px; align-items:start; }
+    @media (max-width: 920px){ .grid{ grid-template-columns:1fr; } }
+    .card{
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:0 12px 28px rgba(0,0,0,.28);
+    }
+    h1{ margin:0 0 10px; font-size:38px; line-height:1.08; letter-spacing:-.3px; }
+    h2{ margin:0 0 10px; font-size:20px; }
+    p{ margin:0 0 10px; color:rgba(238,243,255,.92); }
+    .muted{ color:var(--muted); }
+    .ctaRow{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+    .btn{
+      cursor:pointer; border:0; border-radius:14px; padding:12px 14px; font-weight:800;
+      background:linear-gradient(90deg, rgba(110,231,255,.95), rgba(130,255,180,.85));
+      color:#06101a;
+    }
+    .btn.secondary{
+      background:rgba(255,255,255,.06);
+      color:var(--txt);
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .btn.ghost{
+      background:transparent;
+      color:rgba(238,243,255,.85);
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .kpis{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:12px; }
+    @media (max-width: 920px){ .kpis{ grid-template-columns:1fr; } }
+    .kpi{ padding:14px; border-radius:16px; background:rgba(17,26,51,.55); border:1px solid rgba(255,255,255,.08); }
+    .kpi b{ display:block; font-size:13px; }
+    .kpi span{ display:block; margin-top:6px; font-size:13px; color:var(--muted); line-height:1.35; }
+    .hr{ height:1px; background:rgba(255,255,255,.09); margin:14px 0; }
+    .formGrid{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+    @media (max-width: 700px){ .formGrid{ grid-template-columns:1fr; } }
+    label{ display:block; font-size:12px; color:var(--muted); margin:4px 0; }
+    input,select,textarea{
+      width:100%; padding:12px 12px; border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.22);
+      color:var(--txt);
+      outline:none;
+    }
+    textarea{ min-height:96px; resize:vertical; }
+    .result{
+      margin-top:12px; padding:14px; border-radius:16px;
+      border:1px dashed rgba(110,231,255,.55); background:rgba(110,231,255,.08);
+    }
+    .small{ font-size:12px; color:rgba(238,243,255,.70); line-height:1.4; }
+    .badges{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .badge{ padding:8px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); font-size:12px; color:rgba(238,243,255,.86); }
+    .twoCol{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px; }
+    @media (max-width: 920px){ .twoCol{ grid-template-columns:1fr; } }
+    .logos{ display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-top:10px; }
+    @media (max-width: 920px){ .logos{ grid-template-columns:repeat(2,1fr); } }
+    .logo{
+      padding:12px; border-radius:14px; border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,0,0,.18); color:rgba(238,243,255,.88); font-weight:700; font-size:13px;
+      text-align:center;
+    }
+    details{
+      border:1px solid rgba(255,255,255,.10); border-radius:14px; padding:12px 12px;
+      background:rgba(0,0,0,.18);
+    }
+    details summary{ cursor:pointer; font-weight:800; color:rgba(238,243,255,.92); }
+    details p{ margin-top:8px; color:rgba(238,243,255,.88); }
+    .toast{
+      position:fixed; right:14px; bottom:14px; max-width:380px;
+      padding:12px 14px; border-radius:14px; border:1px solid rgba(255,255,255,.14);
+      background:rgba(17,26,51,.92); box-shadow:0 12px 24px rgba(0,0,0,.35);
+      display:none;
+    }
+    .toast b{ display:block; margin-bottom:4px; }
+    .footer{ margin-top:18px; text-align:center; color:rgba(238,243,255,.58); font-size:12px; }
+    .rightLink{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
+    .linkBtn{ font-size:12px; padding:8px 10px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); color:rgba(238,243,255,.85); }
+  
+    .banner{
+      margin-bottom:18px;
+
+      position:relative;
+      overflow:hidden;
+      padding:0;
+      min-height:240px;
+      background-image:url('https://images.unsplash.com/photo-1766788177821-2b3110a18bbe?fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=70&w=2400');
+      background-size:cover;
+      background-position:center;
+    }
+    .banner::before{
+      content:'';
+      position:absolute; inset:0;
+      background:linear-gradient(90deg, rgba(7,10,20,.92), rgba(7,10,20,.65) 55%, rgba(7,10,20,.35));
+    }
+    .banner::after{
+      content:'';
+      position:absolute; inset:0;
+      background:radial-gradient(1200px 300px at 20% 40%, rgba(110,231,255,.14), transparent 60%);
+      pointer-events:none;
+      mix-blend-mode:screen;
+      opacity:.9;
+    }
+    .bannerInner{
+      position:relative;
+      padding:22px 18px;
+      min-height:240px;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-start;
+      gap:8px;
+    }
+    .bannerInner h2{ margin:0; font-size:22px; }
+
+  
+    .benefits{ display:grid; gap:10px; margin-top:10px; }
+    .benefit{
+      padding:14px;
+      border-radius:16px;
+      background:rgba(17,26,51,.55);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .benefit b{ display:block; font-size:14px; color:rgba(238,243,255,.92); }
+    .benefit span{ display:block; margin-top:6px; font-size:13px; color:var(--muted); line-height:1.35; }
+
+  
+
+    /* Mobile refinements */
+    @media (max-width: 920px){
+      .topbar{ flex-wrap:wrap; gap:12px; }
+      .rightLink{ width:100%; justify-content:flex-start; flex-wrap:wrap; }
+      .banner{ min-height:200px; }
+      .bannerInner{ min-height:200px; padding:16px 16px; }
+      h1{ font-size:30px; }
+      .ctaRow{ flex-direction:column; }
+      .ctaRow .btn{ width:100%; text-align:center; }
+      .grid > :nth-child(2){ order:-1; } /* Cotizador primero en mobile */
+    }
+    @media (max-width: 520px){
+      .wrap{ padding:14px; }
+      .card{ padding:14px; }
+      h1{ font-size:28px; }
+      .pill{ font-size:11px; }
+      .linkBtn{ padding:9px 10px; }
+    }
+
+  
+
+    html{ scroll-behavior:smooth; }
+
+    /* Banner CTA */
+    .bannerCta{ margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; }
+    .bannerCta .btn{ padding:10px 14px; }
+    .bannerCta .btn.ghost{ background:transparent; border:1px solid rgba(255,255,255,.14); }
+
+    /* Result layout */
+    .resultHeader{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+    .resultGrid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-top:10px; }
+    .resultTile{
+      padding:12px;
+      border-radius:16px;
+      background:rgba(17,26,51,.55);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .resultTile .label{ font-size:12px; color:var(--muted); }
+    .resultTile .value{ margin-top:6px; font-size:18px; font-weight:800; letter-spacing:.2px; }
+    .resultTile .hint{ margin-top:6px; font-size:12px; color:var(--muted); line-height:1.35; }
+    .resultDetails{ margin-top:10px; }
+    .resultDetails summary{ cursor:pointer; }
+    #cotizador{ scroll-margin-top: 90px; }
+    #cotizacion-final{ scroll-margin-top: 90px; }
+
+    @media (max-width: 920px){
+      .resultGrid{ grid-template-columns:1fr; }
+      .bannerCta .btn{ width:100%; text-align:center; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <b id="brandName">COMEX SEGURO</b>
+        <span>Insurtech · Seguro de mercadería (Impo/Expo) · Cotizador instantáneo</span>
+      </div>
+      <div class="rightLink">
+        <a class="linkBtn" href="#cotizador">Cotizar</a>
+        <a class="linkBtn" href="#beneficios">Beneficios</a>
+        <a class="linkBtn" href="#faq">FAQ</a>
+</div>
+  </div>
+
+    <div class="card banner" role="img" aria-label="Terminal de contenedores y zona de aduana">
+      <div class="bannerInner">
+        <div class="pill">🛃 Aduana · 🚢 Contenedores · 🌐 Comercio exterior</div>
+        <h2>Seguro de carga para Importación y Exportación.</h2>
+        <p class="muted" style="max-width:760px;">
+          Ingresá datos básicos y obtené cobertura sugerida + prima indicativa. Si te cierra, pedís emisión.
+        </p>
+        <div class="bannerCta">
+          <a class="btn" href="#cotizador">Probar cotizador</a>
+          <a class="btn ghost" href="#cotizacion-final">Pedir cotización final</a>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="pill">⚡ Cotización indicativa en 2 minutos · 📦 Impo/Expo</div>
+        <h1 style="margin-top:12px;">Protegé tu mercadería sin sorpresas.</h1>
+        <p class="muted">Riesgos como daño, robo o pérdida pueden afectar margen y plazos. Con el cotizador obtenés <b>cobertura sugerida</b> + <b>prima indicativa</b>. Si te sirve, pedís la <b>cotización final</b> y avanzamos a emisión.</p>
+
+        <div class="kpis">
+          <div class="kpi"><b>Simulador eficaz</b><span>Simulá tu operación y obtené un resultado instantáneo.</span></div>
+          <div class="kpi"><b>Evaluación acertada</b><span>Recomendación de cobertura y prima según riesgo.</span></div>
+          <div class="kpi"><b>Emisión ágil</b><span>De indicativo a cotización final, sin fricción.</span></div>
+        </div>
+<div class="ctaRow">
+          <a class="btn" href="#cotizador">Probar cotizador</a>
+          <a class="btn secondary" href="#cotizacion-final">Pedir cotización final</a>
+</div>
+
+        <div class="hr"></div>
+        <p class="small">
+          *La prima del cotizador es <b>indicativa</b>. La cotización final depende de suscripción/condiciones y emisión de la aseguradora.
+        </p>
+      </div>
+
+      <div class="card" id="cotizador">
+        <h2>Cotizador (indicativo)</h2>
+        <p class="muted" style="margin-bottom:10px;">Calcula prima aproximada + recomendación según Incoterm y riesgo.</p>
+
+        <div class="formGrid">
+          <div>
+            <label>Operación</label>
+            <select id="op">
+              <option value="impo">Importación</option>
+              <option value="expo">Exportación</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Incoterm</label>
+            <select id="incoterm">
+              <option>EXW</option><option>FCA</option><option>FOB</option><option>CFR</option>
+              <option>CIF</option><option>CIP</option><option>DAP</option><option>DDP</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Modo</label>
+            <select id="modo">
+              <option value="mar">Marítimo</option>
+              <option value="air">Aéreo</option>
+              <option value="land">Terrestre</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Cobertura (ICC)</label>
+            <select id="icc">
+              <option value="A">A (All risks)</option>
+              <option value="B">B (Intermedia)</option>
+              <option value="C">C (Mínima)</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Origen (país/puerto)</label>
+            <input id="origen" placeholder="Ej: China / Shanghai" />
+          </div>
+
+          <div>
+            <label>Destino (país/puerto)</label>
+            <input id="destino" placeholder="Ej: Argentina / Buenos Aires" />
+          </div>
+
+          <div>
+            <label>Valor mercadería (USD)</label>
+            <input id="valor" type="number" min="1" step="1" placeholder="Ej: 50000" />
+          </div>
+
+          <div>
+            <label>Mercadería</label>
+            <select id="cargo">
+              <option value="general">General</option>
+              <option value="autoparts">Repuestos</option>
+              <option value="electronics">Electrónica</option>
+              <option value="chemicals">Químicos</option>
+              <option value="perishable">Perecederos</option>
+              <option value="high_theft">Alto robo</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Riesgo de ruta</label>
+            <select id="ruta">
+              <option value="low">Bajo</option>
+              <option value="mid" selected>Medio</option>
+              <option value="high">Alto</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Deducible</label>
+            <select id="ded">
+              <option value="high">Alto (más barato)</option>
+              <option value="std" selected>Estándar</option>
+              <option value="low">Bajo (más caro)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="ctaRow">
+          <button class="btn" type="button" onclick="cotizar()">Calcular</button>
+          <button class="btn secondary" type="button" onclick="resetQuote()">Limpiar</button>
+        </div>
+
+        <div id="out" class="result" style="display:none;"></div>
+        <p class="small" style="margin-top:10px;">
+          *Suma asegurada sugerida = valor × 1.10 (referencia frecuente). Ajustable por flete/gastos/condiciones.
+        </p>
+      </div>
+    </div>
+
+    <div class="twoCol">
+
+      <div class="card" id="beneficios">
+        <h2>Beneficios que te ofrecemos</h2>
+        <p class="muted">Lo esencial para cotizar rápido y bien.</p>
+
+        <div class="benefits" aria-label="Beneficios">
+          <div class="benefit">
+            <b>✅ Simulación inmediata</b>
+            <span>Cargás Incoterm, ruta y valor. Resultado en minutos.</span>
+          </div>
+          <div class="benefit">
+            <b>✅ Alternativas reales y emisión ágil</b>
+            <span>Opciones comparables y paso a cotización final cuando confirmás.</span>
+          </div>
+          <div class="benefit">
+            <b>✅ Acompañamiento experto</b>
+            <span>Checklist y soporte si hay incidentes. Menos idas y vueltas.</span>
+          </div>
+        </div>
+
+        <p class="small" style="margin-top:10px;">
+          *El simulador es orientativo. La cotización final queda sujeta a suscripción y emisión.
+        </p>
+      </div>
+
+      <div class="card" id="faq">
+        <h2>Preguntas frecuentes</h2>
+        <div style="display:grid; gap:10px;">
+          <details open>
+            <summary>¿Qué cubre ICC A/B/C?</summary>
+            <p class="muted">ICC A suele ser “todo riesgo” (con exclusiones), ICC B intermedia, ICC C mínima. Te recomendamos la opción según mercadería, ruta y riesgo.</p>
+          </details>
+          <details>
+            <summary>¿Quién debería contratar el seguro según Incoterm?</summary>
+            <p class="muted">Depende del Incoterm. Ej.: en CIP el vendedor contrata seguro con cobertura alta; en CIF contrata seguro mínimo por defecto. En otros Incoterms no es obligatorio, pero es recomendable para quien asume el riesgo desde el punto de entrega.</p>
+          </details>
+          <details>
+            <summary>¿Qué documentos me van a pedir?</summary>
+            <p class="muted">Mínimo: proforma/invoice, descripción de mercadería, origen/destino, medio de transporte. Luego: packing list y BL/AWB cuando esté disponible.</p>
+          </details>
+          <details>
+            <summary>¿Cuánto tarda la cotización final?</summary>
+            <p class="muted">En general, buscamos responder en minutos a pocas horas (según complejidad y carga). En cargas complejas, puede requerir validaciones adicionales.</p>
+          </details>
+          <details>
+            <summary>¿Puedo asegurar un embarque que ya salió?</summary>
+            <p class="muted">Depende del momento y condiciones. Algunas aseguradoras aceptan si no hay siniestro conocido y dentro de ciertas ventanas. Consultanos con la fecha exacta.</p>
+          </details>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card" id="cobertura-asegurada" style="margin-top:16px;">
+      <h2>Cobertura Asegurada</h2>
+      <p class="muted">Protegemos tu mercadería en toda la cadena logística.</p>
+
+      <div class="benefits" aria-label="Coberturas">
+        <div class="benefit" style="display:grid; grid-template-columns: 48px 1fr; gap:12px; align-items:start;">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0; margin-top:2px;">
+            <!-- Lock/Security icon -->
+            <rect x="10" y="18" width="28" height="20" rx="2" stroke="#82ffb4" stroke-width="2" fill="none"/>
+            <path d="M16 18V12C16 9.24 18.24 7 21 7C23.76 7 26 9.24 26 12V18" stroke="#82ffb4" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <circle cx="23" cy="26" r="2" fill="#82ffb4"/>
+          </svg>
+          <div>
+            <b>✅ Robo y hurto total</b>
+            <span>Cobertura ante sustracción total de la mercadería durante el trayecto o en paradas intermedias.</span>
+          </div>
+        </div>
+        <div class="benefit" style="display:grid; grid-template-columns: 48px 1fr; gap:12px; align-items:start;">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0; margin-top:2px;">
+            <!-- Forklift/Loading icon -->
+            <rect x="8" y="28" width="32" height="4" rx="1" fill="#82ffb4"/>
+            <rect x="16" y="8" width="4" height="20" fill="#82ffb4"/>
+            <rect x="28" y="8" width="4" height="20" fill="#82ffb4"/>
+            <path d="M14 12L10 18M34 12L38 18" stroke="#82ffb4" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="14" cy="34" r="2" fill="#82ffb4"/>
+            <circle cx="34" cy="34" r="2" fill="#82ffb4"/>
+          </svg>
+          <div>
+            <b>✅ Daños en maniobras de carga y descarga</b>
+            <span>Amparo frente a roturas, golpes o pérdidas producidas durante la manipulación logística.</span>
+          </div>
+        </div>
+        <div class="benefit" style="display:grid; grid-template-columns: 48px 1fr; gap:12px; align-items:start;">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0; margin-top:2px;">
+            <!-- Truck/Transport icon -->
+            <rect x="6" y="20" width="28" height="14" rx="2" stroke="#82ffb4" stroke-width="2" fill="none"/>
+            <path d="M34 20V26C34 27.1 34.9 28 36 28H42V20" stroke="#82ffb4" stroke-width="2" fill="none" stroke-linejoin="round"/>
+            <circle cx="12" cy="36" r="2.5" fill="#82ffb4"/>
+            <circle cx="28" cy="36" r="2.5" fill="#82ffb4"/>
+            <rect x="8" y="14" width="10" height="6" stroke="#82ffb4" stroke-width="1.5" fill="none"/>
+          </svg>
+          <div>
+            <b>✅ Accidentes del medio transportador</b>
+            <span>Protección ante siniestros que afecten al transporte (camión, buque, avión u otro medio).</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<div class="card" id="cotizacion-final" style="margin-top:16px;">
+      <h2>Cotización final / Emisión</h2>
+      <p class="muted">Dejanos tus datos. Te devolvemos cotización final con alternativas y emitimos la que elijas.</p>
+
+      <form id="leadForm">
+        <div class="formGrid">
+          <div>
+            <label>Nombre y apellido</label>
+            <input name="nombre" id="f_nombre" placeholder="Tu nombre" required />
+          </div>
+          <div>
+            <label>Email</label>
+            <input name="email" id="f_email" type="email" placeholder="tu@email.com" required />
+          </div>
+          <div>
+            <label>Teléfono (opcional)</label>
+            <input name="telefono" id="f_telefono" placeholder="+54..." />
+          </div>
+          <div>
+            <label>Empresa</label>
+            <input name="empresa" id="f_empresa" placeholder="Razón social" />
+          </div>
+
+          <div style="grid-column:1/-1;">
+            <label>Detalle breve (opcional)</label>
+            <textarea name="detalle" id="f_detalle" placeholder="Origen/destino, mercadería, valor, fechas, Incoterm..."></textarea>
+          </div>
+
+          <div style="display:none">
+            <label>Dejar vacío</label>
+            <input name="website" id="hp_field" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div style="grid-column:1/-1;">
+            <button class="btn" type="submit">Enviar solicitud</button>
+            <button class="btn secondary" type="button" onclick="prefillFromLastQuote()">Usar datos del cotizador</button>
+          </div>
+        </div>
+
+        <p class="small" style="margin-top:10px;">
+          Disclaimer: la prima del demo es indicativa y no constituye oferta. Sujeto a suscripción, condiciones y emisión.
+        </p>
+      </form>
+    </div>
+
+    <div class="footer">
+      © <span id="brandName2">COMEX SEGURO</span> · Broker/Intermediario · Impo/Expo</div>
+  </div>
+
+  <div class="toast" id="toast"><b id="toastTitle"></b><span id="toastMsg" class="small"></span></div>
+
+  <script>
+    const CONFIG = {
+      brandName: "COMEX SEGURO",      leadProvider: "formspree", // "formspree" | "hubspot"
+      formspree: { formId: "mnjjqarp" },
+      hubspot: {
+        baseUrl: "https://api.hsforms.com",
+        portalId: "REEMPLAZAR_PORTAL_ID",
+        formGuid: "REEMPLAZAR_FORM_GUID"
+      }
+    };
+
+    document.getElementById("brandName").textContent = CONFIG.brandName;
+    document.getElementById("brandName2").textContent = CONFIG.brandName;
+const baseRate = {
+      mar:  { A: 0.0035, B: 0.0025, C: 0.0018 },
+      air:  { A: 0.0030, B: 0.0022, C: 0.0016 },
+      land: { A: 0.0045, B: 0.0032, C: 0.0022 }
+    };
+
+    const cargoFactor = {
+      general: 1.00,
+      autoparts: 1.15,
+      electronics: 1.35,
+      chemicals: 1.40,
+      perishable: 1.30,
+      high_theft: 1.60
+    };
+
+    const routeFactor = { low: 0.95, mid: 1.00, high: 1.25 };
+    const dedFactor   = { high: 0.85, std: 1.00, low: 1.12 };
+
+    function incotermGuidance(inc) {
+      if (inc === "CIP") return { who: "Vendedor (obligación en CIP)", recIcc: "A" };
+      if (inc === "CIF") return { who: "Vendedor (obligación en CIF)", recIcc: "C" };
+      return { who: "No obligatorio: recomendado quien asume el riesgo desde el punto de entrega", recIcc: null };
+    }
+
+    let LAST_QUOTE = null;
+
+    function cotizar() {
+      const op = document.getElementById("op").value;
+      const inc = document.getElementById("incoterm").value;
+      const modo = document.getElementById("modo").value;
+      const icc = document.getElementById("icc").value;
+      const valor = Number(document.getElementById("valor").value || 0);
+      const cargo = document.getElementById("cargo").value;
+      const ruta = document.getElementById("ruta").value;
+      const ded = document.getElementById("ded").value;
+      const origen = (document.getElementById("origen").value || "").trim();
+      const destino = (document.getElementById("destino").value || "").trim();
+
+      if (!valor || valor <= 0) {
+        toast("Falta un dato", "Ingresá el valor de mercadería (USD).");
+        return;
+      }
+
+      const minPremium = 120;
+      const sumAssured = valor * 1.10;
+
+      const rate = (baseRate[modo][icc] || 0.003) *
+                   (cargoFactor[cargo] || 1.0) *
+                   (routeFactor[ruta] || 1.0) *
+                   (dedFactor[ded] || 1.0);
+
+      const premium = Math.max(minPremium, sumAssured * rate);
+      const low = premium * 0.85, high = premium * 1.15;
+
+      const g = incotermGuidance(inc);
+      const recText = (g.recIcc && g.recIcc !== icc)
+        ? `Sugerencia: para ${inc} suele recomendarse ICC ${g.recIcc}.`
+        : `Cobertura ICC ${icc} seleccionada.`;
+
+      LAST_QUOTE = {
+        op, inc, modo, icc, valor, cargo, ruta, ded, origen, destino,
+        sumAssured: Math.round(sumAssured),
+        premium: Math.round(premium),
+        low: Math.round(low),
+        high: Math.round(high),
+        guidance: g
+      };
+
+      const out = document.getElementById("out");
+      out.style.display = "block";
+      out.innerHTML = `
+        <div class="resultHeader">
+          <b>Resultado (indicativo)</b>
+          <span class="small muted">Rango orientativo</span>
+        </div>
+
+        <div class="resultGrid">
+          <div class="resultTile">
+            <div class="label">Cobertura sugerida</div>
+            <div class="value">ICC ${icc}</div>
+            <div class="hint">${recText}</div>
+          </div>
+
+          <div class="resultTile">
+            <div class="label">Suma asegurada</div>
+            <div class="value">USD ${Math.round(sumAssured)}</div>
+            <div class="hint">Sugerida: valor × 1.10</div>
+          </div>
+
+          <div class="resultTile">
+            <div class="label">Prima estimada</div>
+            <div class="value">USD ${Math.round(premium)}</div>
+            <div class="hint">Rango: USD ${Math.round(low)} – ${Math.round(high)}</div>
+          </div>
+        </div>
+
+        <details class="resultDetails">
+          <summary>Ver detalle de la operación</summary>
+          <div class="small muted" style="margin-top:8px; line-height:1.45;">
+            • ${op.toUpperCase()} · Incoterm: ${inc} · Modo: ${modo.toUpperCase()} · Mercadería: ${cargo}<br>
+            • Ruta: ${origen || "—"} → ${destino || "—"}<br>
+            • Quién debería contratar: <b>${g.who}</b>
+          </div>
+        </details>
+
+        <div class="ctaRow" style="margin-top:12px;">
+          <button class="btn" type="button" onclick="prefillFromLastQuote(true)">Solicitar cotización final</button>
+          <button class="btn secondary" type="button" onclick="copyQuote()">Copiar resumen</button>
+        </div>
+      `;
+    }
+
+    function resetQuote(){
+      LAST_QUOTE = null;
+      document.getElementById("out").style.display = "none";
+      document.getElementById("valor").value = "";
+      toast("Listo", "Cotizador reiniciado.");
+    }
+
+
+    function copyQuote() {
+      if (!LAST_QUOTE) { toast("Nada para copiar", "Primero calculá una cotización indicativa."); return; }
+      const lines = [
+        `COMEX SEGURO — resumen`,
+        `${LAST_QUOTE.op.toUpperCase()} · Incoterm: ${LAST_QUOTE.inc} · Modo: ${LAST_QUOTE.modo.toUpperCase()}`,
+        `Mercadería: ${LAST_QUOTE.cargo} · Ruta: ${(LAST_QUOTE.origen||"—")} → ${(LAST_QUOTE.destino||"—")}`,
+        `Suma asegurada sugerida: USD ${Math.round(LAST_QUOTE.sumAssured)}`,
+        `Prima estimada: USD ${Math.round(LAST_QUOTE.premium)} (rango USD ${Math.round(LAST_QUOTE.low)}–${Math.round(LAST_QUOTE.high)})`
+      ];
+      const text = lines.join("\n");
+      navigator.clipboard?.writeText(text)
+        .then(()=>toast("Copiado ✅", "Pegalo en un mail o chat para avanzar."))
+        .catch(()=>toast("No se pudo copiar", "Tu navegador no habilitó el portapapeles."));
+    }
+    function prefillFromLastQuote(scrollToForm=false){
+      if (!LAST_QUOTE){
+        toast("Sin cotización", "Primero corré el cotizador para autocompletar.");
+        return;
+      }
+      const summary =
+        `Operación: ${LAST_QUOTE.op.toUpperCase()} | Incoterm: ${LAST_QUOTE.inc} | Modo: ${LAST_QUOTE.modo.toUpperCase()}
+Origen: ${LAST_QUOTE.origen || "-"} | Destino: ${LAST_QUOTE.destino || "-"}
+Mercadería: ${LAST_QUOTE.cargo} | Valor: USD ${LAST_QUOTE.valor}
+ICC: ${LAST_QUOTE.icc} | Ruta riesgo: ${LAST_QUOTE.ruta} | Deducible: ${LAST_QUOTE.ded}
+Indicativo: USD ${LAST_QUOTE.low}–${LAST_QUOTE.high} (prima) | Suma asegurada sugerida: USD ${LAST_QUOTE.sumAssured}`;
+      const textarea = document.getElementById("f_detalle");
+      textarea.value = (textarea.value ? (textarea.value + "\n\n") : "") + summary;
+
+      toast("Autocompletado", "Pegamos el resumen del cotizador en el detalle.");
+      if (scrollToForm){
+        document.getElementById("cotizacion-final").scrollIntoView({behavior:"smooth"});
+      }
+    }
+
+    const LS_KEY = "insurtech_leads_v1";
+    function saveLeadLocal(payload){
+      const arr = JSON.parse(localStorage.getItem(LS_KEY) || "[]");
+      arr.unshift(payload);
+      localStorage.setItem(LS_KEY, JSON.stringify(arr.slice(0, 500)));
+    }
+
+    async function submitToFormspree(formData){
+      if (CONFIG.formspree.formId === "REEMPLAZAR_FORM_ID") {
+        throw new Error("Falta configurar Formspree formId en CONFIG.");
+      }
+      const endpoint = `https://formspree.io/f/${CONFIG.formspree.formId}`;
+      const res = await fetch(endpoint, { method:"POST", body: formData, headers:{ "Accept":"application/json" } });
+      if (!res.ok) {
+        let msg = "Error enviando a Formspree.";
+        try{ const j = await res.json(); if (j && j.error) msg = j.error; }catch(e){}
+        throw new Error(msg);
+      }
+      return true;
+    }
+
+    function getHubSpotUtk(){
+      const m = document.cookie.match(/(?:^|;\s*)hubspotutk=([^;]+)/);
+      return m ? decodeURIComponent(m[1]) : null;
+    }
+
+    async function submitToHubSpot(fieldsObj){
+      const { baseUrl, portalId, formGuid } = CONFIG.hubspot;
+      if (portalId.startsWith("REEMPLAZAR") || formGuid.startsWith("REEMPLAZAR")) {
+        throw new Error("Falta configurar portalId/formGuid de HubSpot en CONFIG.");
+      }
+
+      const url = `${baseUrl}/submissions/v3/integration/submit/${portalId}/${formGuid}`;
+      const fields = Object.entries(fieldsObj).map(([name,value]) => ({ name, value: String(value ?? "") }));
+
+      const payload = {
+        submittedAt: Date.now(),
+        fields,
+        context: {
+          pageUri: window.location.href,
+          pageName: document.title,
+          hutk: getHubSpotUtk() || undefined
+        }
+      };
+
+      const res = await fetch(url, {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        let text = await res.text();
+        throw new Error("Error enviando a HubSpot: " + text.slice(0,180));
+      }
+      return true;
+    }
+
+    document.getElementById("leadForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if ((document.getElementById("hp_field").value || "").trim() !== "") {
+        toast("Enviado", "¡Gracias!");
+        return;
+      }
+
+      const nombre = document.getElementById("f_nombre").value.trim();
+      const email = document.getElementById("f_email").value.trim();
+      const telefono = document.getElementById("f_telefono").value.trim();
+      const empresa = document.getElementById("f_empresa").value.trim();
+      const detalle = document.getElementById("f_detalle").value.trim();
+
+      const lead = {
+        ts: new Date().toISOString(),
+        nombre, email, telefono, empresa, detalle,
+        lastQuote: LAST_QUOTE
+      };
+
+      saveLeadLocal(lead);
+
+      try{
+        if (CONFIG.leadProvider === "hubspot") {
+          await submitToHubSpot({
+            firstname: nombre,
+            email,
+            phone: telefono,
+            company: empresa,
+            message: detalle
+          });
+        } else {
+          const fd = new FormData();
+          fd.append("nombre", nombre);
+          fd.append("email", email);
+          fd.append("telefono", telefono);
+          fd.append("empresa", empresa);
+          fd.append("detalle", detalle);
+          if (LAST_QUOTE) fd.append("cotizador", JSON.stringify(LAST_QUOTE));
+          await submitToFormspree(fd);
+        }
+
+        toast("Enviado ✅", "Te contactamos a la brevedad.");
+        document.getElementById("leadForm").reset();
+        // window.location.href = "success.html"; // opcional
+      } catch(err){
+        toast("No se pudo enviar", String(err.message || err));
+      }
+    });
+
+    let toastT = null;
+    function toast(title, msg){
+      const el = document.getElementById("toast");
+      document.getElementById("toastTitle").textContent = title;
+      document.getElementById("toastMsg").textContent = msg;
+      el.style.display = "block";
+      clearTimeout(toastT);
+      toastT = setTimeout(()=>{ el.style.display="none"; }, 4200);
+    }
+  </script>
+</body>
+</html>

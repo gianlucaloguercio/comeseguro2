@@ -1,0 +1,6 @@
+{
+  "name": "comex-seguro",
+  "version": "1.0.0",
+  "description": "Cotizador de seguros de mercadería",
+  "private": true
+}
